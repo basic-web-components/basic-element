@@ -5,7 +5,7 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "quetzal-element": "JanMiksovsky/quetzal-element#master"
+    "polymer": "Polymer/polymer#master"
   },
   "ignore": [
     "**/.*"
