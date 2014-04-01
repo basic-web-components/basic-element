@@ -64,11 +64,11 @@ window.BasicWebComponents = {
     // need the attribute there so that generic styling can be set simply by
     // defining rules like
     //
-    //   :host([generic]) {
+    //   :host([generic=""]) {
     //     ...
     //   }
     //
-    if ( this.generic == null ) {
+    if ( this.getAttribute( "generic" ) == null ) {
       this.generic = true;
     }
   },
