@@ -1,6 +1,6 @@
 {
-  "name": "quetzal-element",
-  "description": "Base class for some elements in the Quetzal collection",
+  "name": "basic-element",
+  "description": "Base class for some elements in the Basic Web Components collection",
   "version": "0.0.1",
   "private": true,
   "license": "MIT",
