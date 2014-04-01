@@ -21,28 +21,6 @@ Right now, this includes:
 // Basic helpers.
 window.BasicWebComponents = {
 
-  // Sugar to allow quick delegation of a method to a sub-element.
-  alias: function( accessChain, sideEffectFn ) {
-    return function() {  
-      var result = this;
-      var keys = accessChain.split( "." );
-      var hasArguments = ( arguments.length > 0 );
-      for ( var i = 0, length = keys.length; i < length; i++ ) {
-        var key = keys[i];
-        if (i === keys.length - 1 ) {
-          result[ key ].apply( result, arguments );
-          if ( hasArguments && sideEffectFn ) {
-            sideEffectFn.apply( this, arguments );
-          }
-          result = this;
-        } else {
-          result = result[ key ];
-        }
-      }
-      return result;
-    }
-  },
-
   // Extend the given set of members with the helpers and return the result.
   extend: function( options ) {
     options = options || {};
@@ -54,6 +32,8 @@ window.BasicWebComponents = {
     return options;
   },
 
+  // Helper function to log output to the console, prefixed by the element's
+  // tag. This makes it easier to see which element is logging the output.
   log: function( s ) {
     if ( console ) {
       console.log( this.localName + ": " + s );
@@ -66,6 +46,9 @@ window.BasicWebComponents = {
   },
 
   setup: function() {
+
+    // If the element has a contentChanged handler, then wire up an observer for
+    // content change events.
     if ( this.contentChanged ) {
       this._observeContentChanged();
       if ( this.childNodes.length > 0 ) {
@@ -74,11 +57,23 @@ window.BasicWebComponents = {
         this.contentChanged();
       }
     }
+
+    // We explicitly set the generic attribute to true, rather than providing
+    // that as a default value. A default value won't appear on an element
+    // instance as an attribute, but an attribute we set explicitly will. We
+    // need the attribute there so that generic styling can be set simply by
+    // defining rules like
+    //
+    //   :host([generic]) {
+    //     ...
+    //   }
+    //
     if ( this.generic == null ) {
       this.generic = true;
     }
   },
 
+  // Wire up an observer for (light DOM) content change events.
   _observeContentChanged: function() {
     var observer = new MutationObserver( function() {
       this.contentChanged();
@@ -92,7 +87,7 @@ window.BasicWebComponents = {
 
 };
 
-Polymer( "basic-element", BasicWebComponents.extend());
+Polymer( "basic-element", BasicWebComponents.extend() );
 </script>
 
 </polymer-element>
