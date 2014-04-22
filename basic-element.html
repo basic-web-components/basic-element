@@ -11,7 +11,8 @@ Right now, this includes:
 
 * contentChanged. A callback invoked when an element's light DOM content changes.
   This is also invoked if the element contains a <content> node and new nodes
-  are distributed to that.
+  are distributed to that. Note: if an element has an attached callback, the
+  callback should invoke this.super() for contentChanged to work.
 
 -->
 
@@ -129,8 +130,6 @@ window.BasicWebComponents = {
         this.log( "host content changed" );
         this.contentChanged();
       }.bind( this ));
-    } else {
-      this.log( "no host" );
     }
   }
 
