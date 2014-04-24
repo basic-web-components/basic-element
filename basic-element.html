@@ -29,7 +29,6 @@ window.BasicWebComponents = {
     // content change events.
     if ( this.contentChanged ) {
       this._observeContentChanged( this, function() {
-        this.log( "element's own content changed" );
         this._observeContentChangedHandler();
       }.bind( this ));
       if ( this.childNodes.length > 0 ) {
@@ -97,7 +96,6 @@ window.BasicWebComponents = {
   // Wire up an observer for (light DOM) content change events on the given
   // node.
   _observeContentChanged: function( node, handler ) {
-    this.log( "_observeContentChanged" );
     var observer = new MutationObserver( handler );
     observer.observe( node, {
       characterData: true,
@@ -107,7 +105,6 @@ window.BasicWebComponents = {
   },
 
   _observeContentChangedHandler: function() {
-    this.log( "_observeContentChangedHandler: " + this.innerHTML );
     var containsContentNode = ( this.querySelector( "content" ) != null );
     if ( containsContentNode ) {
       // The element's new content contains <content> nodes, so from now on,
@@ -122,12 +119,9 @@ window.BasicWebComponents = {
   },
 
   _observeHostContentChanged: function() {
-    this.log( "_observeHostContentChanged" );
     var host = this.host();
     if ( host ) {
-      this.log( "observing host content" );
       this._observeContentChanged( host, function() {
-        this.log( "host content changed" );
         this.contentChanged();
       }.bind( this ));
     }
