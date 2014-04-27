@@ -18,7 +18,7 @@ Right now, this includes:
 
 <link rel="import" href="../polymer/polymer.html">
 
-<polymer-element name="basic-element" attributes="generic">
+<polymer-element name="basic-element">
 
 <script>
 // Basic helpers.
@@ -75,6 +75,13 @@ window.BasicWebComponents = {
   ready: function() {
     this.super();
     this.setup();
+  },
+
+  publish: {
+    generic: {
+      value: null,
+      reflect: true
+    }
   },
 
   setup: function() {
