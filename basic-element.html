@@ -21,8 +21,48 @@ Right now, this includes:
 <polymer-element name="basic-element">
 
 <script>
-// Basic helpers.
+/*
+ * Basic helpers.
+ *
+ * These can be included in any element with the use of Platform.mixin():
+ *
+ * Polymer( "my-component", Platform.mixin( BasicWebComponents, {
+ *   // Your own properties/methods go here.
+ * }));
+ *
+ */
 window.BasicWebComponents = {
+
+  // Return the host element for this element. If this element is not hosted by
+  // another element (it's not attached to anything, or is hosted by the
+  // top-level document), this returns null.
+  //
+  // It'd be nice if this were a getter, but we haven't tried to see whether
+  //  Platform.mixin would do the right thing.
+  host: function() {
+    for ( var parent = this.parentNode; parent != null; parent = parent.parentNode ) {
+      if ( parent.host ) {
+        return parent.host;
+      }
+    }
+  },
+
+  // Log output to the console prefixed by the element's tag. This makes it
+  // easier to see which element is logging the output.
+  log: function( s ) {
+    if ( console ) {
+      console.log( this.localName + ": " + s );
+    }
+  }
+
+};
+
+
+
+/*
+ * Basic element base class.
+ */
+Polymer( "basic-element", Platform.mixin( BasicWebComponents, {
 
   attached: function() {
     // If the element has a contentChanged handler, then wire up an observer for
@@ -35,40 +75,6 @@ window.BasicWebComponents = {
         // Consider any initial content of a new element to be "changed" content.
         this._observeContentChangedHandler();
       }
-    }
-  },
-
-  // Extend the given set of members with the helpers and return the result.
-  // TODO: Prevent this from inadvertently reading getters on the target object.
-  extend: function( options ) {
-    options = options || {};
-    for ( var key in BasicWebComponents ) {
-      if ( !options[ key ] ) {
-        options[ key ] = BasicWebComponents[ key ];
-      }
-    }
-    return options;
-  },
-
-  // Return the host element for this element. If this element is not hosted by
-  // another element (it's not attached to anything, or is hosted by the
-  // top-level document), this returns null.
-  //
-  // TODO: Make this a getter. This complicates extend (above), which will try
-  // to read the getter when extending a class.
-  host: function() {
-    for ( var parent = this.parentNode; parent != null; parent = parent.parentNode ) {
-      if ( parent.host ) {
-        return parent.host;
-      }
-    }
-  },
-
-  // Helper function to log output to the console, prefixed by the element's
-  // tag. This makes it easier to see which element is logging the output.
-  log: function( s ) {
-    if ( console ) {
-      console.log( this.localName + ": " + s );
     }
   },
 
@@ -134,9 +140,7 @@ window.BasicWebComponents = {
     }
   }
 
-};
-
-Polymer( "basic-element", BasicWebComponents.extend() );
+}));
 </script>
 
 </polymer-element>
