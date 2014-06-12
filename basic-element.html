@@ -33,13 +33,40 @@ Right now, this includes:
  */
 window.BasicWebComponents = {
 
+  /*
+   * Returns an in-order collection of children, expanding any content nodes.
+   * Like the standard children property, this skips text nodes.
+   *
+   * TODO: This walks the whole content tree every time the list is requested.
+   * It'd be nice to cache the answer and invalidate it only when content
+   * actually changes.
+   */
+  get flattenChildren() {
+    return this._flatten( this.children, false );
+  },
+
+  /*
+   * Returns an in-order collection of child nodes, expanding any content nodes.
+   * Like the standard childNodes property, this includes text nodes.
+   */
+  get flattenChildNodes() {
+    return this._flatten( this.childNodes, true );
+  },
+
+  get flattenTextContent() {
+    var textNodes = this.flattenChildNodes.filter( function( node ) {
+      return ( node instanceof Text );
+    });
+    var strings = textNodes.map( function( node ) {
+      return node.textContent;
+    });
+    return strings.join( "" );
+  },
+
   // Return the host element for this element. If this element is not hosted by
   // another element (it's not attached to anything, or is hosted by the
   // top-level document), this returns null.
-  //
-  // It'd be nice if this were a getter, but we haven't tried to see whether
-  //  Platform.mixin would do the right thing.
-  host: function() {
+  get host() {
     for ( var parent = this.parentNode; parent != null; parent = parent.parentNode ) {
       if ( parent.host ) {
         return parent.host;
@@ -53,6 +80,35 @@ window.BasicWebComponents = {
     if ( console ) {
       console.log( this.localName + ": " + s );
     }
+  },
+
+  /*
+   * Given a node, return the children of that element. If any of the children
+   * are content elements, instead of returning the content element, return the
+   * nodes distributed to it. (Apply this rule recursively.)
+   *
+   * If includeTextNodes is true, text nodes will be included, as in the
+   * standard childNodes property; by default, this skips text nodes, like the
+   * standard children property.
+   */
+  _flatten: function( nodes, includeTextNodes ) {
+    var expanded = Array.prototype.map.call( nodes, function( node ) {
+      if ( node instanceof HTMLContentElement ) {
+        // content element; use its distributed nodes instead.
+        return this._flatten( node.getDistributedNodes(), includeTextNodes );
+      } else if ( node instanceof HTMLElement ) {
+        // Plain element; use as is.
+        return [ node ];
+      } else if ( node instanceof Text && includeTextNodes ) {
+        // Text node.
+        return [ node ];
+      } else {
+        // Comment, processing instruction, etc.; skip.
+        return [];
+      }
+    }.bind( this ));
+    var flattened = Array.prototype.concat.apply( [], expanded );
+    return flattened;
   }
 
 };
@@ -132,7 +188,7 @@ Polymer( "basic-element", Platform.mixin( BasicWebComponents, {
   },
 
   _observeHostContentChanged: function() {
-    var host = this.host();
+    var host = this.host;
     if ( host ) {
       this._observeContentChanged( host, function() {
         this.contentChanged();
