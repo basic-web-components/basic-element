@@ -14,6 +14,13 @@ Right now, this includes:
   are distributed to that. Note: if an element has an attached callback, the
   callback should invoke this.super() for contentChanged to work.
 
+* Content flattening. General-purpose composable elements need to be able to
+  walk their content tree, including distributed content. This class defines
+  helpers called flattenChildren, flattenChildNodes, flattenTextContent that
+  parallel the standard children, childNodes, and textContent properties,
+  respectively, expanding any content nodes to include distributed content.
+
+@element basic-element
 -->
 
 <link rel="import" href="../polymer/polymer.html">
