@@ -125,7 +125,7 @@ window.BasicWebComponents = {
 /*
  * Basic element base class.
  */
-Polymer( "basic-element", Platform.mixin( BasicWebComponents, {
+Polymer( "basic-element", Platform.mixin( {
 
   attached: function() {
     // If the element has a contentChanged handler, then wire up an observer for
@@ -203,7 +203,10 @@ Polymer( "basic-element", Platform.mixin( BasicWebComponents, {
     }
   }
 
-}));
+// Mix BasicWebComponents in last; otherwise Polymer uses that element itself
+// in the basic-element prototype, which prevents other elements from mixing it
+// into their prototypes.
+}, BasicWebComponents ));
 </script>
 
 </polymer-element>
