@@ -61,10 +61,7 @@ window.BasicWebComponents = {
   },
 
   get flattenTextContent() {
-    var textNodes = this.flattenChildNodes.filter( function( node ) {
-      return ( node instanceof Text );
-    });
-    var strings = textNodes.map( function( node ) {
+    var strings = this.flattenChildNodes.map( function( node ) {
       return node.textContent;
     });
     return strings.join( "" );
