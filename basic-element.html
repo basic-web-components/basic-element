@@ -1,30 +1,40 @@
+<link rel="import" href="../polymer/polymer.html">
+
 <!--
-  
+@group Basic Web Components
+
 Base class for some of the elements in the Basic Web Components collection.
 
 This provides some services which aren't provided by the browser or Polymer.
 Right now, this includes:
 
-* Generic styling. A "generic" attribute, which defaults to true, allows
+* Generic styling. A `generic` attribute, which defaults to `true`, allows
   elements to receive baseline styling that can easily be removed by setting
-  "generic" to false.
+  `generic` to `false`.
 
-* contentChanged. A callback invoked when an element's light DOM content changes.
-  This is also invoked if the element contains a <content> node and new nodes
+* `contentChanged`. A callback invoked when an element's light DOM content changes.
+  This is also invoked if the element contains a `<content>` node and new nodes
   are distributed to that. Note: if an element has an attached callback, the
-  callback should invoke this.super() for contentChanged to work.
+  callback should invoke `this.super()` for `contentChanged` to work.
 
 * Content flattening. General-purpose composable elements need to be able to
   walk their content tree, including distributed content. This class defines
-  helpers called flattenChildren, flattenChildNodes, flattenTextContent that
-  parallel the standard children, childNodes, and textContent properties,
+  helpers called `flattenChildren`, `flattenChildNodes`, `flattenTextContent` that
+  parallel the standard `children`, `childNodes`, and `textContent` properties,
   respectively, expanding any content nodes to include distributed content.
 
+<b>Usage:</b>
+
+    <basic-element generic="[true|false]"></basic-element>
+
+<b>Example:</b>
+
+    <basic-element generic="true"></basic-element>
+
 @element basic-element
+@status stable
+@homepage basic-web-components.github.io/basic-element/components/basic-element
 -->
-
-<link rel="import" href="../polymer/polymer.html">
-
 <polymer-element name="basic-element">
 
 <script>
@@ -144,6 +154,14 @@ Polymer( "basic-element", Platform.mixin( {
   },
 
   publish: {
+    /**
+     * Allows elements to receive baseline styling that can easily be removed
+     * by setting `generic` to `false`.
+     *
+     * @attribute generic
+     * @type boolean
+     * @default true
+     */
     generic: {
       value: null,
       reflect: true
