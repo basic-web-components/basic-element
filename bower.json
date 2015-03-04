@@ -5,6 +5,7 @@
   "license": "MIT",
   "main": "basic-element.html",
   "dependencies": {
+    "basic-helpers": "basic-web-components/basic-helpers#master",
     "polymer": "Polymer/polymer#master"
   },
   "keywords": [
