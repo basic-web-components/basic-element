@@ -32,7 +32,7 @@ Right now, this includes:
 /*
  * Basic element base class.
  */
-Polymer( Platform.mixin({
+Polymer(Platform.mixin({
 
   attached: function() {
     this.observeContentChanges();
@@ -44,9 +44,9 @@ Polymer( Platform.mixin({
 
   // Log output to the console prefixed by the element's tag. This makes it
   // easier to see which element is logging the output.
-  log: function( s ) {
-    if ( console ) {
-      console.log( this.localName + ": " + s );
+  log: function(s) {
+    if (console) {
+      console.log(this.localName + ': ' + s);
     }
   },
 
@@ -73,7 +73,7 @@ Polymer( Platform.mixin({
     //     ...
     //   }
     //
-    if ( this.getAttribute( "generic" ) == null ) {
+    if (this.getAttribute('generic') == null) {
       this.generic = true;
     }
   }
@@ -81,7 +81,7 @@ Polymer( Platform.mixin({
 // Mix BasicContentHelpers in last; otherwise Polymer uses that element itself
 // in the basic-element prototype, which prevents other elements from mixing it
 // into their prototypes.
-}, BasicContentHelpers ));
+}, BasicContentHelpers));
 </script>
 
 </polymer-element>
